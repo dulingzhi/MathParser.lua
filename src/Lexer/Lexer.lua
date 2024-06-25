@@ -32,17 +32,21 @@ local ERROR_NUMBER_AFTER_EXPONENT_SIGN = "Expected a number after the exponent s
 local ERROR_INVALID_CHARACTER          = "Invalid character '%s'. Expected whitespace, parenthesis, comma, operator, or number."
 local ERROR_NO_CHAR_STREAM             = "No charStream given"
 
-local DEFAULT_OPERATORS      = {"+", "-", "*", "/", "^", "%"}
+local DEFAULT_OPERATORS      = {
+  "+", "-", "*", "/", "^", "%",
+  "==", "!", "!=", ">", "<", ">=", "<=",
+  "||", '&&', ":=",
+}
 local DEFAULT_OPERATORS_TRIE = makeTrie(DEFAULT_OPERATORS)
 
 local WHITESPACE_LOOKUP              = createPatternLookupTable("%s")
 local NUMBER_LOOKUP                  = createPatternLookupTable("%d")
-local IDENTIFIER_LOOKUP              = createPatternLookupTable("[a-zA-Z_]")
+local IDENTIFIER_LOOKUP              = createPatternLookupTable("[a-zA-Z_%.]")
 local HEXADECIMAL_NUMBER_LOOKUP      = createPatternLookupTable("[%da-fA-F]")
 local PLUS_MINUS_LOOKUP              = createPatternLookupTable("[+-]")
 local SCIENTIFIC_E_LOOKUP            = createPatternLookupTable("[eE]")
 local HEXADECIMAL_X_LOOKUP           = createPatternLookupTable("[xX]")
-local IDENTIFIER_CONTINUATION_LOOKUP = createPatternLookupTable("[a-zA-Z0-9_]")
+local IDENTIFIER_CONTINUATION_LOOKUP = createPatternLookupTable("[a-zA-Z0-9_%.]")
 local PARENTHESIS_LOOKUP             = createPatternLookupTable("[()]")
 
 --* Lexer *--

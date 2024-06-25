@@ -180,6 +180,10 @@ function MathParser:new(operatorPrecedenceLevels, variables, operatorFunctions, 
     MathParserInstance[key] = value
   end
 
+  variables = variables or {}
+  variables['false'] = false
+  variables['true'] = true
+
   -- Properties
   MathParserInstance.operatorPrecedenceLevels = operatorPrecedenceLevels
   MathParserInstance.variables = variables

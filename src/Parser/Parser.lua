@@ -35,11 +35,21 @@ local ERROR_EXPECTED_COMMA_OR_CLOSING_PARENTHESIS = "Expected ',' or ')', got '%
 local ERROR_NO_CHARSTREAM                         = "<No charStream, error message: %s>"
 
 local DEFAULT_OPERATOR_PRECEDENCE_LEVELS = {
-  Unary  = {   ["-"] = 4 },
-  Binary = {   ["^"] = 3,
-    ["*"] = 2, ["/"] = 2, ["%"] = 2,
-    ["+"] = 1, ["-"] = 1 },
-  RightAssociativeBinaryOperators = { ["^"] = true }
+  Unary  = {
+    ["-"] = 7, ["!"] = 7,
+  },
+  Binary = {
+    [":="] = 1,
+    ["&&"] = 2,
+    ["||"] = 3,
+    ["=="] = 4, ["!="] = 4, [">"] = 4, ["<"] = 4, [">="] = 4, ["<="] = 4,
+    ["+"] = 5, ["-"] = 5,
+    ["*"] = 6, ["/"] = 6, ["%"] = 6,
+    ["^"] = 7,
+  },
+  RightAssociativeBinaryOperators = {
+    ["^"] = true
+  },
 }
 
 --* ParserMethods *--

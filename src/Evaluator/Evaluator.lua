@@ -14,7 +14,8 @@ local insert = table.insert
 --* Constants *--
 local DEFAULT_OPERATOR_FUNCTIONS = {
   Unary = {
-    ["-"] = function(operand) return -operand end
+    ["-"] = function(operand) return -operand end,
+    ["!"] = function(operand) return not operand end,
   },
   Binary = {
     ["+"] = function(left, right) return left + right end,
@@ -22,7 +23,16 @@ local DEFAULT_OPERATOR_FUNCTIONS = {
     ["/"] = function(left, right) return left / right end,
     ["*"] = function(left, right) return left * right end,
     ["^"] = function(left, right) return left ^ right end,
-    ["%"] = function(left, right) return left % right end
+    ["%"] = function(left, right) return left % right end,
+    ["=="] = function(left, right) return left == right end,
+    ["!="] = function(left, right) return left ~= right end,
+    [">"] = function(left, right) return left > right end,
+    ["<"] = function(left, right) return left < right end,
+    [">="] = function(left, right) return left >= right end,
+    ["<="] = function(left, right) return left <= right end,
+    ["||"] = function(left, right) return not not left or not not right end,
+    ["&&"] = function(left, right) return not not (left and right) end,
+    [":="] = function(left, right, _node, variable) variable[left] = right end,
   }
 }
 
@@ -77,9 +87,9 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
     local operatorFunction = operatorFunctions.Binary[nodeValue]
     assert(operatorFunction, "invalid operator")
 
-    local leftValue = evaluateNode(nodeLeft)
     local rightValue = evaluateNode(nodeRight)
-    return operatorFunction(leftValue, rightValue, node)
+    local leftValue = evaluateNode(nodeLeft, nodeRight)
+    return operatorFunction(leftValue, rightValue, node, variables)
   end
 
   --- Check what type of operator node it is and evaluates it by calling the appropriate function.
@@ -115,14 +125,17 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
   --- Evaluates the given node.
   -- @param <Table> node The node to evaluate.
   -- @return <Number> result The result of the evaluation.
-  function evaluateNode(node)
+  function evaluateNode(node, nodeRight)
     local nodeType = node.TYPE
 
     if nodeType == "Constant" then
       return tonumber(node.Value)
     elseif nodeType == "Variable" then
       local variableValue = variables[node.Value]
-      if not variableValue then
+      if variableValue == nil then
+        if nodeRight ~= nil then
+          return tostring(node.Value)
+        end
         return error("Variable not found: " .. tostring(node.Value))
       end
       return variableValue
