@@ -19,9 +19,14 @@ function Instance:addFunc(name, func)
     self.__vm:addFunction(name, func)
 end
 
-function Instance:exec(expression)
+function Instance:exec(ast)
     assert(self.__vm, 'Invalid instance object')
-    return self.__vm:solve(expression)
+    return self.__vm:evaluate(ast)
+end
+
+function Instance:parse(expression)
+    assert(self.__vm, 'Invalid instance object')
+    return self.__vm:parse(self.__vm:tokenize(expression), expression)
 end
 
 return LibFormula
