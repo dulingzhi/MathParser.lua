@@ -1,0 +1,18 @@
+Option "minify-level" "full"
+Option "uglify"
+Option "uglify-level" "full"
+Option "no-executable"
+
+
+Module "Helpers/Helpers" "Helpers/Helpers.lua"
+Module "Evaluator/Evaluator" "Evaluator/Evaluator.lua"
+Module "Lexer/Lexer" "Lexer/Lexer.lua"
+Module "Lexer/TokenFactory" "Lexer/TokenFactory.lua"
+Module "Parser/Parser" "Parser/Parser.lua"
+Module "Parser/NodeFactory" "Parser/NodeFactory.lua"
+Module "MathParser" "MathParser.lua"
+
+Main "LibFormula-1.0.lua"
+
+Output "LibFormula.lua"
+
