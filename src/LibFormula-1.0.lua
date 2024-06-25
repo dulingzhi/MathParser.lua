@@ -11,22 +11,25 @@ end
 
 local Parser = require('MathParser')
 function Instance:new()
-    return setmetatable({ __vm = Parser:new() }, { __index = self })
+    local o = setmetatable({ __vm = Parser:new() }, { __index = self })
+    assert(o.__vm, 'Invalid instance object')
+    return o
 end
 
 function Instance:addFunc(name, func)
-    assert(self.__vm, 'Invalid instance object')
     self.__vm:addFunction(name, func)
 end
 
 function Instance:exec(ast)
-    assert(self.__vm, 'Invalid instance object')
     return self.__vm:evaluate(ast)
 end
 
 function Instance:parse(expression)
-    assert(self.__vm, 'Invalid instance object')
     return self.__vm:parse(self.__vm:tokenize(expression), expression)
+end
+
+function Instance:perform(expression)
+    return self.__vm:solve(expression)
 end
 
 return LibFormula

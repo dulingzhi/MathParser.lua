@@ -253,7 +253,7 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
       -- It's a variable
       consume()
       return token
-    elseif tokenType == "Constant" then
+    elseif tokenType == "Constant" or tokenType == "String" then
       consume()
       return token
     end

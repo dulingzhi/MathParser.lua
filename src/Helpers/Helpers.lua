@@ -9,6 +9,8 @@ local char   = string.char
 local match  = string.match
 local gmatch = string.gmatch
 local insert = table.insert
+local strlen = string.utf8len or string.len
+local strsub = string.utf8sub or string.sub
 
 --* Helpers *--
 local Helpers = {}
@@ -18,7 +20,8 @@ local Helpers = {}
 -- @return <Table> table The table of characters.
 function Helpers.stringToTable(string)
   local table = {}
-  for char in gmatch(string, ".") do
+  for i=1, strlen(string) do
+    local char = strsub(string, i, i)
     insert(table, char)
   end
   return table
@@ -45,7 +48,7 @@ function Helpers.makeTrie(table)
   local trieTable = {}
   for _, op in ipairs(table) do
     local node = trieTable
-    for character in op:gmatch(".") do
+    for character in gmatch(op, ".") do
       node[character] = node[character] or {}
       node = node[character]
     end

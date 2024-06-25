@@ -25,5 +25,8 @@ end
 function TokenFactory.createCommaToken(curCharPos)
   return { TYPE = "Comma", Value = ",", Position = curCharPos }
 end
+function TokenFactory.createStrToken(value, curCharPos)
+  return { TYPE = "String", Value = value, Position = curCharPos }
+end
 
 return TokenFactory

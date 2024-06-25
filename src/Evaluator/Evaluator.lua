@@ -143,6 +143,8 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
       return evaluateOperator(node)
     elseif nodeType == "FunctionCall" then
       return evaluateFunctionCall(node)
+    elseif nodeType == "String" then
+      return tostring(node.Value)
     end
 
     return error("Invalid node type: " .. tostring(nodeType) .. " ( You're not supposed to see this error message. )")

@@ -22,6 +22,7 @@ local createVariableToken    = TokenFactory.createVariableToken
 local createParenthesesToken = TokenFactory.createParenthesesToken
 local createOperatorToken    = TokenFactory.createOperatorToken
 local createCommaToken       = TokenFactory.createCommaToken
+local createStrToken         = TokenFactory.createStrToken
 
 --* Constants *--
 local ERROR_SEPARATOR = "+------------------------------+"
@@ -212,6 +213,14 @@ local function Lexer(expression, operators, charPos)
     return concat(number)
   end
 
+  local function consumeText()
+    local text = { curChar }
+    while peek() ~= ',' and peek() ~= ')'  do
+      insert(text, consume())
+    end
+    return concat(text)
+  end
+
   --- Consumes the next identifier from the character stream.
   -- @return <String> identifier The next identifier.
   local function consumeIdentifier()
@@ -234,10 +243,8 @@ local function Lexer(expression, operators, charPos)
       local newToken = consumeNumber()
       return createConstantToken(newToken, curCharPos)
     end
-
-    local errorMessage = generateErrorMessage(ERROR_INVALID_CHARACTER:format(curChar))
-    insert(errors, errorMessage)
-    return
+    local newToken = consumeText()
+    return createStrToken(newToken, curCharPos)
   end
 
   --- Consumes the next operator from the character stream.
