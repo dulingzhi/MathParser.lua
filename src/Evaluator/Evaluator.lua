@@ -31,6 +31,7 @@ local DEFAULT_OPERATOR_FUNCTIONS = {
     [">="] = function(left, right) return left >= right end,
     ["<="] = function(left, right) return left <= right end,
     ["||"] = function(left, right) return not not left or not not right end,
+    ["||||"] = function(left, right) return not not left or not not right end,
     ["&&"] = function(left, right) return not not (left and right) end,
     [":="] = function(left, right, _node, variable) variable[left] = right end,
   }

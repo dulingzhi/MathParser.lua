@@ -36,7 +36,7 @@ local ERROR_NO_CHAR_STREAM             = "No charStream given"
 local DEFAULT_OPERATORS      = {
   "+", "-", "*", "/", "^", "%",
   "==", "!", "!=", ">", "<", ">=", "<=",
-  "||", '&&', ":=",
+  "||", "||||", '&&', ":=",
 }
 local DEFAULT_OPERATORS_TRIE = makeTrie(DEFAULT_OPERATORS)
 
