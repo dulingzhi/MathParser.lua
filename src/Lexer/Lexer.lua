@@ -215,8 +215,20 @@ local function Lexer(expression, operators, charPos)
 
   local function consumeText()
     local text = { curChar }
-    while peek() ~= ',' and peek() ~= ')'  do
-      insert(text, consume())
+    local node       = operatorsTrie
+    local charStream = charStream
+    local curCharPos = curCharPos
+    -- Trie walker
+    local index = 1
+    while true  do
+      -- Use raw charStream instead of peek() for performance reasons
+      local character = charStream[curCharPos + index]
+      if not character or node[character] or character == ")" or character == "," then break end
+      index = index + 1
+      insert(text, character)
+    end
+    if index > 0 then
+      consume(index-1)
     end
     return concat(text)
   end

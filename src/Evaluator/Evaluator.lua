@@ -87,8 +87,8 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
     local operatorFunction = operatorFunctions.Binary[nodeValue]
     assert(operatorFunction, "invalid operator")
 
+    local leftValue = evaluateNode(nodeLeft)
     local rightValue = evaluateNode(nodeRight)
-    local leftValue = evaluateNode(nodeLeft, nodeRight)
     return operatorFunction(leftValue, rightValue, node, variables)
   end
 
@@ -125,7 +125,7 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
   --- Evaluates the given node.
   -- @param <Table> node The node to evaluate.
   -- @return <Number> result The result of the evaluation.
-  function evaluateNode(node, nodeRight)
+  function evaluateNode(node)
     local nodeType = node.TYPE
 
     if nodeType == "Constant" then
@@ -133,10 +133,7 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
     elseif nodeType == "Variable" then
       local variableValue = variables[node.Value]
       if variableValue == nil then
-        if nodeRight ~= nil then
-          return tostring(node.Value)
-        end
-        return error("Variable not found: " .. tostring(node.Value))
+        return tostring(node.Value)
       end
       return variableValue
     elseif nodeType == "Operator" or nodeType == "UnaryOperator" then
