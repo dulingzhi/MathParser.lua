@@ -192,7 +192,7 @@ local function Lexer(expression, operators, charPos)
 
     -- Check for hexadecimal numbers
     if curChar == '0' and HEXADECIMAL_X_LOOKUP[peek()] then
-      return concat(consumeHexNumber(number))
+      return tonumber(concat(consumeHexNumber(number)), 16)
     end
 
     while NUMBER_LOOKUP[peek()] do
@@ -210,7 +210,7 @@ local function Lexer(expression, operators, charPos)
       number = consumeScientificNumber(number)
     end
 
-    return concat(number)
+    return tonumber(concat(number))
   end
 
   local function consumeText()
