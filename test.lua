@@ -32,6 +32,14 @@ I:addFunction('target.interrupt', function(x)
     return false
 end)
 
+I:addFunction('spell.active', function(n)
+    return n == '英勇打击'
+end)
+
+I:addFunction('player.rage.actual', function ()
+    return 50
+end)
+
 print(1, I:solve('toggle(Hello) == World && !player.buff.exists(bbb, true)') == false)
 
 print(2, I:solve('toggle(你好 世界)') == '你好 世界')
@@ -41,6 +49,8 @@ print(3, I:solve('print(你好, 世界)') == '你好')
 print(4, I:solve('toggle(cd) && (player.buff.exists(死亡之愿) || spell.cooldown(死亡之愿) > 55)'))
 
 print(5, I:solve('toggle(interrupts) == target.interrupt'))
+
+print(6, I:solve('!spell.active(英勇打击) && !spell.active(顺劈斩) && player.rage.actual >= 12'))
 
 local rotation = { --
     -- 被控制

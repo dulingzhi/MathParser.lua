@@ -120,10 +120,11 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
   --- Checks if the current token is a function call
   -- @return <Boolean> isFunctionCall Whether the current token is a function call.
   local function isFunctionCall()
-    local nextToken = peek()
-    if not nextToken then
-      return currentToken.TYPE == "Variable" and functions and functions[currentToken.Value] ~= nil
+    if functions[currentToken.Value] ~= nil then
+        return true
     end
+    local nextToken = peek()
+    if not nextToken then return end
     return currentToken.TYPE == "Variable" and nextToken.TYPE == "Parentheses" and nextToken.Value == "("
   end
 
@@ -172,13 +173,11 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
       if not currentToken then
         -- A little bit of backtracking to give a better error message
         local lastToken = peek(-1)
-        if not lastToken then
-          break -- No Comma calls
-        end
-        if lastToken.TYPE == "Comma" then
+        if lastToken and lastToken.TYPE == "Comma" then
           error(generateError(ERROR_EXPECTED_EXPRESSION))
         end
-        error(generateError(ERROR_EXPECTED_CLOSING_PARENTHESIS))
+        -- error(generateError(ERROR_EXPECTED_CLOSING_PARENTHESIS))
+        break
       elseif currentToken.Value == ")" then
         break
       elseif currentToken.TYPE == "Comma" then
