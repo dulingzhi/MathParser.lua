@@ -19,12 +19,17 @@ I:addFunction('player.buff.exists', function(a, b)
     return false
 end)
 
-I:addFunction('player.buff.exists', function (a)
+I:addFunction('player.buff.exists', function(a)
     return true
 end)
 
-I:addFunction('spell.cooldown', function (a)
+I:addFunction('spell.cooldown', function(a)
     return 10
+end)
+
+I:addFunction('target.interrupt', function(x)
+    print('target.interrupt')
+    return false
 end)
 
 print(1, I:solve('toggle(Hello) == World && !player.buff.exists(bbb, true)') == false)
@@ -34,6 +39,8 @@ print(2, I:solve('toggle(你好 世界)') == '你好 世界')
 print(3, I:solve('print(你好, 世界)') == '你好')
 
 print(4, I:solve('toggle(cd) && (player.buff.exists(死亡之愿) || spell.cooldown(死亡之愿) > 55)'))
+
+print(5, I:solve('toggle(interrupts) == target.interrupt'))
 
 local rotation = { --
     -- 被控制
@@ -72,6 +79,6 @@ local rotation = { --
 
 for index, value in ipairs(rotation) do
     if value[2] then
-        print(value[1], I:parse(I:tokenize(value[2]), value[2]))
+        -- print(value[1], I:parse(I:tokenize(value[2]), value[2]))
     end
 end

@@ -33,7 +33,7 @@ function MathParserMethods:parse(tokens, expression)
   if self.cachedASTs[expression] then
     return self.cachedASTs[expression]
   end
-  self.Parser.resetToInitialState(tokens, self.operatorPrecedenceLevels, nil, expression)
+  self.Parser.resetToInitialState(tokens, self.operatorPrecedenceLevels, nil, expression, self.functions)
   local AST = self.Parser.parse()
   self.cachedASTs[expression] = AST
   return AST

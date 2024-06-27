@@ -62,7 +62,7 @@ local ParserMethods = {}
 -- @param <Number?> tokenIndex=1 The index of the current token
 -- @param <String|Table ?> expression=nil The expression to show during an error (e.g unexpected operator, etc.)
 -- @return <Table> ParserInstance The Parser instance.
-local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
+local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, functions)
   local currentTokenIndex, currentToken
   if tokens then
     currentTokenIndex = tokenIndex or 1
@@ -70,6 +70,7 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
   end
   local operatorPrecedenceLevels = operatorPrecedenceLevels or DEFAULT_OPERATOR_PRECEDENCE_LEVELS
   local expression               = expression
+  local functions                = functions
 
   --- Get the next token from the token stream. N is the amount of tokens to skip.
   -- @param <Number?> n=1 The amount of tokens to skip in order to get the next token.
@@ -120,7 +121,9 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
   -- @return <Boolean> isFunctionCall Whether the current token is a function call.
   local function isFunctionCall()
     local nextToken = peek()
-    if not nextToken then return end
+    if not nextToken then
+      return currentToken.TYPE == "Variable" and functions and functions[currentToken.Value] ~= nil
+    end
     return currentToken.TYPE == "Variable" and nextToken.TYPE == "Parentheses" and nextToken.Value == "("
   end
 
@@ -169,6 +172,9 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
       if not currentToken then
         -- A little bit of backtracking to give a better error message
         local lastToken = peek(-1)
+        if not lastToken then
+          break -- No Comma calls
+        end
         if lastToken.TYPE == "Comma" then
           error(generateError(ERROR_EXPECTED_EXPRESSION))
         end
@@ -273,7 +279,7 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
   --- Resets the parser to its initial state so it can be reused.
   -- @param <Table> tokens The tokens to reset to.
   -- @param <Table?> operatorPrecedenceLevels=DEFAULT_OPERATOR_PRECEDENCE_LEVELS The operator precedence levels to reset to.
-  local function resetToInitialState(givenTokens, givenOperatorPrecedenceLevels, givenTokenIndex, givenExpression)
+  local function resetToInitialState(givenTokens, givenOperatorPrecedenceLevels, givenTokenIndex, givenExpression, givenFunctions)
     assert(givenTokens, ERROR_NO_TOKENS)
 
     tokens = givenTokens
@@ -282,6 +288,7 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression)
 
     operatorPrecedenceLevels = givenOperatorPrecedenceLevels or DEFAULT_OPERATOR_PRECEDENCE_LEVELS
     expression               = givenExpression
+    functions                = givenFunctions
   end
 
   --- Parses the given tokens, and returns the AST.
