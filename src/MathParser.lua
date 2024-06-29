@@ -42,13 +42,15 @@ end
 --- Evaluates the given AST.
 -- @param <Table> AST The AST to evaluate.
 -- @return <Number> evaluatedValue The result of the evaluation.
-function MathParserMethods:evaluate(AST)
-  if self.cachedResults[AST] then
+function MathParserMethods:evaluate(AST, cacheResult)
+  if cacheResult and self.cachedResults[AST] ~= nil then
     return self.cachedResults[AST]
   end
   self.Evaluator.resetToInitialState(AST, self.variables, self.operatorFunctions, self.functions)
   local evaluatedValue = self.Evaluator:evaluate()
-  self.cachedResults[AST] = evaluatedValue
+  if cacheResult then
+    self.cachedResults[AST] = evaluatedValue
+  end
   return evaluatedValue
 end
 

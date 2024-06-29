@@ -16,6 +16,8 @@ local createPatternLookupTable = Helpers.createPatternLookupTable
 local concat = table.concat
 local insert = table.insert
 local rep    = string.rep
+local reverse= string.reverse
+local gsub   = string.gsub
 
 local createConstantToken    = TokenFactory.createConstantToken
 local createVariableToken    = TokenFactory.createVariableToken
@@ -255,7 +257,7 @@ local function Lexer(expression, operators, charPos)
       local newToken = consumeNumber()
       return createConstantToken(newToken, curCharPos)
     end
-    local newToken = consumeText()
+    local newToken = reverse(gsub(reverse(consumeText()), '^%s+', ''))
     return createStrToken(newToken, curCharPos)
   end
 

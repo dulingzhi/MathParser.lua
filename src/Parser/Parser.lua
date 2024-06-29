@@ -120,12 +120,18 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
   --- Checks if the current token is a function call
   -- @return <Boolean> isFunctionCall Whether the current token is a function call.
   local function isFunctionCall()
-    if functions[currentToken.Value] ~= nil then
+    local nextToken = peek()
+    if not nextToken then
+        if functions[currentToken.Value] ~= nil then
+            return true, true
+        end
+    end
+    if currentToken.TYPE == "Variable" and nextToken.TYPE == "Parentheses" and nextToken.Value == "(" then
         return true
     end
-    local nextToken = peek()
-    if not nextToken then return end
-    return currentToken.TYPE == "Variable" and nextToken.TYPE == "Parentheses" and nextToken.Value == "("
+    if functions[currentToken.Value] ~= nil then
+        return true, true
+    end
   end
 
   --- Gets the precedence of the given token.
@@ -162,12 +168,12 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
 
   --- Parses the function call.
   -- @return <Table> expression The AST of the function call.
-  function parseFunctionCall()
+  function parseFunctionCall(noBracket)
     -- <function call> ::= <variable> "(" <expression> ["," <expression>]* ")"
     local functionName = currentToken.Value
     consume(2) -- Consume the variable (function name) and the opening parenthesis
     local arguments = {}
-    while true do
+    while not noBracket do
       local argument = parseExpression()
       insert(arguments, argument)
       if not currentToken then
@@ -176,7 +182,7 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
         if lastToken and lastToken.TYPE == "Comma" then
           error(generateError(ERROR_EXPECTED_EXPRESSION))
         end
-        -- error(generateError(ERROR_EXPECTED_CLOSING_PARENTHESIS))
+        error(generateError(ERROR_EXPECTED_CLOSING_PARENTHESIS))
         break
       elseif currentToken.Value == ")" then
         break
@@ -187,7 +193,11 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
         error(generateError(ERROR_EXPECTED_COMMA_OR_CLOSING_PARENTHESIS, currentToken.Value))
       end
     end
-    consume() -- Consume the closing parenthesis
+    if not noBracket then
+        consume() -- Consume the closing parenthesis
+    else
+        consume(-1) -- Consume the closing parenthesis
+    end
     return createFunctionCallNode(functionName, arguments)
   end
 
@@ -251,8 +261,9 @@ local function Parser(tokens, operatorPrecedenceLevels, tokenIndex, expression, 
       return expression
     elseif tokenType == "Variable" then
       -- Check if it's a function call first
-      if isFunctionCall() then
-        return parseFunctionCall()
+      local isFunc, noBracket = isFunctionCall()
+      if isFunc then
+        return parseFunctionCall(noBracket)
       end
 
       -- It's a variable

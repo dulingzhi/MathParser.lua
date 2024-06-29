@@ -9,46 +9,46 @@ t[e]=n
 return n
 end
 c['Helpers/Helpers']=(function(...)local r=string.char
-local l=string.match
-local a=string.gmatch
-local i=table.insert
-local c=string.utf8len or string.len
-local t=string.utf8sub or string.sub
-local n={}function n.stringToTable(e)local o={}for n=1,c(e)do
-local e=t(e,n,n)i(o,e)end
-return o
+local t=string.match
+local l=string.gmatch
+local c=table.insert
+local e=string.utf8len or string.len
+local a=string.utf8sub or string.sub
+local n={}function n.stringToTable(o)local n={}for e=1,e(o)do
+local e=a(o,e,e)c(n,e)end
+return n
 end
 function n.createPatternLookupTable(o)local e={}for n=0,255 do
-local n=r(n)if l(n,o)then
+local n=r(n)if t(n,o)then
 e[n]=true
 end
 end
 return e
 end
-function n.makeTrie(e)local o={}for e,t in ipairs(e)do
-local e=o
-for n in a(t,".")do
+function n.makeTrie(e)local t={}for e,o in ipairs(e)do
+local e=t
+for n in l(o,".")do
 e[n]=e[n]or{}e=e[n]end
-e.value=t
+e.value=o
 end
-return o
+return t
 end
 return n end)c['Evaluator/Evaluator']=(function(...)local e=a("Helpers/Helpers")local p=(unpack or table.unpack)local m=table.insert
-local a={Unary={["-"]=function(e)return-e end,["!"]=function(e)return not e end,},Binary={["+"]=function(e,n)return e+n end,["-"]=function(e,n)return e-n end,["/"]=function(e,n)return e/n end,["*"]=function(e,n)return e*n end,["^"]=function(n,e)return n^e end,["%"]=function(e,n)return e%n end,["=="]=function(n,e)return n==e end,["!="]=function(n,e)return n~=e end,[">"]=function(e,n)return e>n end,["<"]=function(e,n)return e<n end,[">="]=function(e,n)return e>=n end,["<="]=function(n,e)return n<=e end,["||"]=function(n,e)return not not n or not not e end,["||||"]=function(e,n)return not not e or not not n end,["&&"]=function(e,n)return not not(e and n)end,[":="]=function(n,o,t,e)e[n]=o end,}}local f={sin=math.sin,cos=math.cos,tan=math.tan,asin=math.asin,acos=math.acos,atan=math.atan,floor=math.floor,ceil=math.ceil,abs=math.abs,sqrt=math.sqrt,log=math.log,log10=math.log10,exp=math.exp,rad=math.rad,deg=math.deg}local function h(n,e,o,c)local r=n
-local l=e or{}local t=o or a
-local s=c or{}local d,u,i,c,o
-function d(e)local n=e.Value
-local t=t.Unary[n]assert(t,"invalid operator: "..tostring(n))local n=o(e.Operand)return t(n,e)end
+local c={Unary={["-"]=function(e)return-e end,["!"]=function(e)return not e end,},Binary={["+"]=function(n,e)return n+e end,["-"]=function(n,e)return n-e end,["/"]=function(n,e)return n/e end,["*"]=function(e,n)return e*n end,["^"]=function(e,n)return e^n end,["%"]=function(n,e)return n%e end,["=="]=function(n,e)return n==e end,["!="]=function(e,n)return e~=n end,[">"]=function(e,n)return e>n end,["<"]=function(e,n)return e<n end,[">="]=function(e,n)return e>=n end,["<="]=function(e,n)return e<=n end,["||"]=function(n,e)return not not n or not not e end,["||||"]=function(e,n)return not not e or not not n end,["&&"]=function(n,e)return not not(n and e)end,[":="]=function(n,e,t,o)o[n]=e end,}}local a={sin=math.sin,cos=math.cos,tan=math.tan,asin=math.asin,acos=math.acos,atan=math.atan,floor=math.floor,ceil=math.ceil,abs=math.abs,sqrt=math.sqrt,log=math.log,log10=math.log10,exp=math.exp,rad=math.rad,deg=math.deg}local function h(e,n,o,i)local r=e
+local l=n or{}local t=o or c
+local f=i or{}local u,d,s,i,o
 function u(e)local n=e.Value
+local t=t.Unary[n]assert(t,"invalid operator: "..tostring(n))local n=o(e.Operand)return t(n,e)end
+function d(e)local n=e.Value
 local r=e.Left
 local a=e.Right
 local n=t.Binary[n]assert(n,"invalid operator")local t=o(r)local o=o(a)return n(t,o,e,l)end
-function i(e)local n=not(not e.Operand)if n then
-return d(e)end
+function s(e)local n=not(not e.Operand)if n then
 return u(e)end
-function c(n)local e=n.FunctionName
+return d(e)end
+function i(n)local e=n.FunctionName
 local t=n.Arguments
-local n=s[e]or f[e]assert(n,"invalid function call: "..tostring(e))local e={}for t,n in ipairs(t)do
+local n=f[e]or a[e]assert(n,"invalid function call: "..tostring(e))local e={}for t,n in ipairs(t)do
 local n=o(n)m(e,n)end
 return n(p(e))end
 function o(n)local e=n.TYPE
@@ -58,262 +58,274 @@ local e=l[n.Value]if e==nil then
 return tostring(n.Value)end
 return e
 elseif e=="Operator"or e=="UnaryOperator"then
-return i(n)elseif e=="FunctionCall"then
-return c(n)elseif e=="String"then
+return s(n)elseif e=="FunctionCall"then
+return i(n)elseif e=="String"then
 return tostring(n.Value)end
 return error("Invalid node type: "..tostring(e).." ( You're not supposed to see this error message. )")end
-local function i(o,c,n,e)r=o
-l=c or{}t=n or a
-s=e or f
+local function u(i,n,o,e)r=i
+l=n or{}t=o or c
+f=e or a
 end
 local function e()assert(r,"No expression to evaluate")return o(r)end
-return{resetToInitialState=i,evaluate=e}end
-return h end)c['Lexer/Lexer']=(function(...)local e=a("Helpers/Helpers")local n=a("Lexer/TokenFactory")local h=e.makeTrie
-local b=e.stringToTable
+return{resetToInitialState=u,evaluate=e}end
+return h end)c['Lexer/Lexer']=(function(...)local e=a("Helpers/Helpers")local n=a("Lexer/TokenFactory")local f=e.makeTrie
+local P=e.stringToTable
 local e=e.createPatternLookupTable
 local c=table.concat
-local t=table.insert
-local P=string.rep
-local v=n.createConstantToken
-local x=n.createVariableToken
-local g=n.createParenthesesToken
-local k=n.createOperatorToken
-local E=n.createCommaToken
-local V=n.createStrToken
-local f="+------------------------------+"local O="Expected a number after the 'x' or 'X'"local y="Expected a number after the decimal point"local w="Expected a number after the exponent sign"local n="Invalid character '%s'. Expected whitespace, parenthesis, comma, operator, or number."local U="No charStream given"local p={"+","-","*","/","^","%","==","!","!=",">","<",">=","<=","||","||||",'&&',":=",}local m=h(p)local S=e("%s")local a=e("%d")local L=e("[a-zA-Z_%.]")local T=e("[%da-fA-F]")local _=e("[+-]")local F=e("[eE]")local N=e("[xX]")local C=e("[a-zA-Z0-9_%.]")local A=e("[()]")local function R(n,o,u)local s={}local i={}local l,r,e
+local l=table.insert
+local Y=string.rep
+local b=string.reverse
+local S=string.gsub
+local F=n.createConstantToken
+local L=n.createVariableToken
+local k=n.createParenthesesToken
+local v=n.createOperatorToken
+local g=n.createCommaToken
+local E=n.createStrToken
+local s="+------------------------------+"local x="Expected a number after the 'x' or 'X'"local V="Expected a number after the decimal point"local y="Expected a number after the exponent sign"local n="Invalid character '%s'. Expected whitespace, parenthesis, comma, operator, or number."local O="No charStream given"local d={"+","-","*","/","^","%","==","!","!=",">","<",">=","<=","||","||||",'&&',":=",}local m=f(d)local R=e("%s")local a=e("%d")local _=e("[a-zA-Z_%.]")local T=e("[%da-fA-F]")local U=e("[+-]")local C=e("[eE]")local w=e("[xX]")local B=e("[a-zA-Z0-9_%.]")local H=e("[()]")local function A(n,t,u)local h={}local i={}local o,r,e
 if n then
 n=n
-l=b(n)r=l[u or 1]e=u or 1
-s[n]=l
+o=P(n)r=o[u or 1]e=u or 1
+h[n]=o
 end
-local n=(o and h(o))or m
-local Y=o or p
+local n=(t and f(t))or m
+local N=t or d
 local u=n
-local function n()return l[e+1]or"\0"end
-local function o(n)local o=e+(n or 1)local n=l[o]or"\0"e=o
+local function n()return o[e+1]or"\0"end
+local function t(n)local t=e+(n or 1)local n=o[t]or"\0"e=t
 r=n
 return n
 end
-local function d(n,o)local e=e+(o or 0)local e=P(" ",e-1).."^"local e="\n"..c(l).."\n"..e.."\n"..n
+local function p(n,t)local e=e+(t or 0)local e=Y(" ",e-1).."^"local e="\n"..c(o).."\n"..e.."\n"..n
 return e
 end
-local function P()local e=i
+local function A()local e=i
 if#e>0 then
-local e=c(e,"\n"..f)error("Lexer errors:".."\n"..f..e.."\n"..f)end
+local e=c(e,"\n"..s)error("Lexer errors:".."\n"..s..e.."\n"..s)end
 end
-local function H(e)local e=(e or r)return a[e]or(e=="."and a[n()])end
-local function R(e)t(e,o())local l=T[n()]if not l then
-local e=d(O,1)t(i,e)end
+local function I(e)local e=(e or r)return a[e]or(e=="."and a[n()])end
+local function Y(e)l(e,t())local o=T[n()]if not o then
+local e=p(x,1)l(i,e)end
 repeat
-t(e,o())l=T[n()]until not l
+l(e,t())o=T[n()]until not o
 return e
 end
-local function O(e)t(e,o())local l=a[n()]if not l then
-local e=d(y,1)t(i,e)end
+local function T(o)l(o,t())local e=a[n()]if not e then
+local e=p(V,1)l(i,e)end
 repeat
-t(e,o())l=a[n()]until not l
+l(o,t())e=a[n()]until not e
+return o
+end
+local function s(e)l(e,t())if U[n()]then
+l(e,t())end
+local o=a[n()]if not o then
+local e=p(y,1)l(i,e)end
+repeat
+l(e,t())o=a[n()]until not o
 return e
 end
-local function f(e)t(e,o())if _[n()]then
-t(e,o())end
-local l=a[n()]if not l then
-local e=d(w,1)t(i,e)end
-repeat
-t(e,o())l=a[n()]until not l
-return e
-end
-local function T()local e={r}local l=false
-local l=false
-local l=false
-if r=='0'and N[n()]then
-return tonumber(c(R(e)),16)end
+local function p()local e={r}local o=false
+local o=false
+local o=false
+if r=='0'and w[n()]then
+return tonumber(c(Y(e)),16)end
 while a[n()]do
-t(e,o())end
+l(e,t())end
 if n()=="."then
-e=O(e)end
-local n=n()if F[n]then
-e=f(e)end
+e=T(e)end
+local n=n()if C[n]then
+e=s(e)end
 return tonumber(c(e))end
-local function f()local r={r}local a=u
-local l=l
-local e=e
-local n=1
+local function a()local r={r}local a=u
+local o=o
+local n=e
+local e=1
 while true do
-local e=l[e+n]if not e or a[e]or e==")"or e==","then break end
-n=n+1
-t(r,e)end
-if n>0 then
-o(n-1)end
+local n=o[n+e]if not n or a[n]or n==")"or n==","then break end
+e=e+1
+l(r,n)end
+if e>0 then
+t(e-1)end
 return c(r)end
-local function d()local t,e={},0
+local function s()local o,e={},0
 local l
 repeat
 e=e+1
-t[e]=r
-local e=n()until not(C[e]and o())return c(t)end
-local function c()if H(r)then
-local n=T()return v(n,e)end
-local n=f()return V(n,e)end
+o[e]=r
+local e=n()until not(B[e]and t())return c(o)end
+local function c()if I(r)then
+local n=p()return F(n,e)end
+local n=b(S(b(a()),'^%s+',''))return E(n,e)end
 local function a()local n=u
-local r=l
+local r=o
 local l=e
 local e
-local t=0
+local o=0
 while true do
-local o=r[l+t]n=n[o]if not n then break end
+local t=r[l+o]n=n[t]if not n then break end
 e=n.value
-t=t+1
+o=o+1
 end
 if not e then return end
-o(#e-1)return e
+t(#e-1)return e
 end
-local function t()local n=r
-if S[n]then
+local function l()local n=r
+if R[n]then
 return
-elseif A[n]then
-return g(n,e)elseif L[n]then
-return x(d(),e)elseif n==","then
-return E(e)else
+elseif H[n]then
+return k(n,e)elseif _[n]then
+return L(s(),e)elseif n==","then
+return g(e)else
 local n=a()if n then
-return k(n,e)end
+return v(n,e)end
 return c()end
 end
-local function a()local n,e={},0
-local l=r
-while l~="\0"do
-local t=t()if t then
+local function a()local o,e={},0
+local n=r
+while n~="\0"do
+local l=l()if l then
 e=e+1
-n[e]=t
+o[e]=l
 end
-l=o()end
-return n
+n=t()end
+return o
 end
-local function t(n,o)if n then
+local function l(n,t)if n then
 n=n
-l=s[n]or b(n)r=l[1]e=1
-s[n]=l
+o=h[n]or P(n)r=o[1]e=1
+h[n]=o
 end
-u=(o and h(o))or m
-Y=o or p
+u=(t and f(t))or m
+N=t or d
 end
-local function e()assert(l,U)i={}local e=a()P()return e
+local function n()assert(o,O)i={}local e=a()A()return e
 end
-return{resetToInitialState=t,run=e}end
-return R
-end)c['Lexer/TokenFactory']=(function(...)local e={}function e.createConstantToken(e,n)return{TYPE="Constant",Value=e,Position=n}end
+return{resetToInitialState=l,run=n}end
+return A
+end)c['Lexer/TokenFactory']=(function(...)local e={}function e.createConstantToken(n,e)return{TYPE="Constant",Value=n,Position=e}end
 function e.createVariableToken(e,n)return{TYPE="Variable",Value=e,Position=n}end
 function e.createParenthesesToken(e,n)return{TYPE="Parentheses",Value=e,Position=n}end
 function e.createOperatorToken(n,e)return{TYPE="Operator",Value=n,Position=e}end
 function e.createCommaToken(e)return{TYPE="Comma",Value=",",Position=e}end
-function e.createStrToken(n,e)return{TYPE="String",Value=n,Position=e}end
-return e end)c['Parser/Parser']=(function(...)local n=a("Helpers/Helpers")local e=a("Parser/NodeFactory")local s=n.stringToTable
-local p=table.insert
+function e.createStrToken(e,n)return{TYPE="String",Value=e,Position=n}end
+return e end)c['Parser/Parser']=(function(...)local n=a("Helpers/Helpers")local e=a("Parser/NodeFactory")local _=n.stringToTable
+local b=table.insert
 local n=table.concat
-local d=math.max
-local f=math.min
-local Y=string.rep
-local F=e.createUnaryOperatorNode
-local R=e.createOperatorNode
-local L=e.createFunctionCallNode
+local A=math.max
+local N=math.min
+local T=string.rep
+local R=e.createUnaryOperatorNode
+local Y=e.createOperatorNode
+local O=e.createFunctionCallNode
 local a=20
-local S="No tokens given"local O="No tokens to parse"local k="Expected EOF, got '%s'"local g="Unexpected token: '%s' in <primary>, expected constant, variable or function call"local i="Expected expression, got EOF"local v="Expected ')', got EOF"local b="Expected ',' or ')', got '%s'"local u="<No charStream, error message: %s>"local h={Unary={["-"]=7,["!"]=7,},Binary={[":="]=1,["&&"]=2,["||"]=3,["||||"]=3,["=="]=4,["!="]=4,[">"]=4,["<"]=4,[">="]=4,["<="]=4,["+"]=5,["-"]=5,["*"]=6,["/"]=6,["%"]=6,["^"]=7,},RightAssociativeBinaryOperators={["^"]=true},}local e={}local function V(r,c,o,l,n)local t,e
+local y="No tokens given"local x="No tokens to parse"local L="Expected EOF, got '%s'"local F="Unexpected token: '%s' in <primary>, expected constant, variable or function call"local d="Expected expression, got EOF"local p="Expected ')', got EOF"local S="Expected ',' or ')', got '%s'"local m="<No charStream, error message: %s>"local h={Unary={["-"]=7,["!"]=7,},Binary={[":="]=1,["&&"]=2,["||"]=3,["||||"]=3,["=="]=4,["!="]=4,[">"]=4,["<"]=4,[">="]=4,["<="]=4,["+"]=5,["-"]=5,["*"]=6,["/"]=6,["%"]=6,["^"]=7,},RightAssociativeBinaryOperators={["^"]=true},}local e={}local function V(r,n,o,c,i)local l,e
 if r then
-t=o or 1
-e=r[t]end
-local o=c or h
-local c=l
-local T=n
-local function m(e)return r[t+(e or 1)]end
-local function n(n)local o=t+(n or 1)local n=r[o]t=o
+l=o or 1
+e=r[l]end
+local t=n or h
+local s=c
+local u=i
+local function f(e)return r[l+(e or 1)]end
+local function n(n)local o=l+(n or 1)local n=r[o]l=o
 e=n
 return n
 end
+local function g(n)local e=n or e
+if not t.Binary then return end
+return e and e.TYPE=="Operator"and t.Binary[e.Value]end
 local function E(n)local e=n or e
-if not o.Binary then return end
-return e and e.TYPE=="Operator"and o.Binary[e.Value]end
-local function V(n)local e=n or e
-if not o.Unary then return end
-return e and e.TYPE=="Operator"and o.Unary[e.Value]end
-local function y(n)local e=n or e
-if not o.RightAssociativeBinaryOperators then return end
-return e and e.TYPE=="Operator"and o.RightAssociativeBinaryOperators[e.Value]end
-local function x()if T[e.Value]~=nil then
+if not t.Unary then return end
+return e and e.TYPE=="Operator"and t.Unary[e.Value]end
+local function k(n)local e=n or e
+if not t.RightAssociativeBinaryOperators then return end
+return e and e.TYPE=="Operator"and t.RightAssociativeBinaryOperators[e.Value]end
+local function v()local n=f()if not n then
+if u[e.Value]~=nil then
+return true,true
+end
+end
+if e.TYPE=="Variable"and n.TYPE=="Parentheses"and n.Value=="("then
 return true
 end
-local n=m()if not n then return end
-return e.TYPE=="Variable"and n.TYPE=="Parentheses"and n.Value=="("end
-local function P(e)return e and o.Binary[e.Value]end
-local function l(o,...)if not c then
-return u:format(o)end
-local n=s(c)local t=o:format(...)local e=(not e and#n+1)or e.Position
-local o={}for e=d(1,e-a),f(e+a,#n)do
-p(o,n[e])end
-local n=table.concat(o)local e=Y(" ",e-1).."^"return"\n"..n.."\n"..e.."\n"..t
+if u[e.Value]~=nil then
+return true,true
 end
-local s,d,u,f,a
-function s()local t=e.Value
-n(2)local o={}while true do
-local t=a()p(o,t)if not e then
-local e=m(-1)if e and e.TYPE=="Comma"then
-error(l(i))end
-break
+end
+local function P(e)return e and t.Binary[e.Value]end
+local function o(o,...)if not s then
+return m:format(o)end
+local n=_(s)local t=o:format(...)local e=(not e and#n+1)or e.Position
+local o={}for e=A(1,e-a),N(e+a,#n)do
+b(o,n[e])end
+local n=table.concat(o)local e=T(" ",e-1).."^"return"\n"..n.."\n"..e.."\n"..t
+end
+local m,i,c,T,a
+function m(l)local r=e.Value
+n(2)local t={}while not l do
+local l=a()b(t,l)if not e then
+local e=f(-1)if e and e.TYPE=="Comma"then
+error(o(d))end
+error(o(p))break
 elseif e.Value==")"then
 break
 elseif e.TYPE=="Comma"then
 n()else
-error(l(b,e.Value))end
+error(o(S,e.Value))end
 end
-n()return L(t,o)end
-function d(r)local o=u()while E(e)do
-local t=P(e)if t<=r and not y(e)then
+if not l then
+n()else
+n(-1)end
+return O(r,t)end
+function i(r)local t=c()while g(e)do
+local l=P(e)if l<=r and not k(e)then
 break
 end
-local r=e
+local e=e
 if not n()then
-error(l(i))end
-local e=d(t)o=R(r.Value,o,e)end
-return o
+error(o(d))end
+local n=i(l)t=Y(e.Value,t,n)end
+return t
 end
-function u()if not V(e)then
-return f()end
-local o=e.Value
+function c()if not E(e)then
+return T()end
+local e=e.Value
 if not n()then
-error(l(i))end
-local e=u()return F(o,e)end
-function f()local o=e
-if not o then return end
-local r=o.Value
-local t=o.TYPE
-if t=="Parentheses"and r=="("then
-n()local o=a()if not e or e.Value~=")"then
-error(l(v))end
-n()return o
-elseif t=="Variable"then
-if x()then
-return s()end
-n()return o
-elseif t=="Constant"or t=="String"then
-n()return o
+error(o(d))end
+local n=c()return R(e,n)end
+function T()local t=e
+if not t then return end
+local r=t.Value
+local l=t.TYPE
+if l=="Parentheses"and r=="("then
+n()local t=a()if not e or e.Value~=")"then
+error(o(p))end
+n()return t
+elseif l=="Variable"then
+local o,e=v()if o then
+return m(e)end
+n()return t
+elseif l=="Constant"or l=="String"then
+n()return t
 end
-error(l(g,r))end
-function a()local e=d(0)return e
+error(o(F,r))end
+function a()local e=i(0)return e
 end
-local function i(n,u,a,i,l)assert(n,S)r=n
-t=a or 1
-e=n[t]o=u or h
-c=i
-T=l
+local function d(n,c,a,o,i)assert(n,y)r=n
+l=a or 1
+e=n[l]t=c or h
+s=o
+u=i
 end
-local function o(n)assert(r,O)local o=a()if e and not n then
-error(l(k,e.Value))end
-return o
+local function t(n)assert(r,x)local t=a()if e and not n then
+error(o(L,e.Value))end
+return t
 end
-return{resetToInitialState=i,parse=o}end
+return{resetToInitialState=d,parse=t}end
 return V
 end)c['Parser/NodeFactory']=(function(...)local e={}function e.createUnaryOperatorNode(n,e)return{TYPE="UnaryOperator",Value=n,Operand=e}end
-function e.createOperatorNode(o,n,e)return{TYPE="Operator",Value=o,Left=n,Right=e}end
-function e.createFunctionCallNode(e,n)return{TYPE="FunctionCall",FunctionName=e,Arguments=n}end
-return e end)c['MathParser']=(function(...)local e=a("Helpers/Helpers")local u=a("Evaluator/Evaluator")local d=a("Lexer/Lexer")local i=a("Parser/Parser")local e={}function e:tokenize(e)if self.cachedTokens[e]then
+function e.createOperatorNode(e,n,o)return{TYPE="Operator",Value=e,Left=n,Right=o}end
+function e.createFunctionCallNode(n,e)return{TYPE="FunctionCall",FunctionName=n,Arguments=e}end
+return e end)c['MathParser']=(function(...)local e=a("Helpers/Helpers")local u=a("Evaluator/Evaluator")local i=a("Lexer/Lexer")local c=a("Parser/Parser")local e={}function e:tokenize(e)if self.cachedTokens[e]then
 return self.cachedTokens[e]end
 self.Lexer.resetToInitialState(e,self.operators)local n=self.Lexer.run()self.cachedTokens[e]=n
 return n
@@ -323,10 +335,12 @@ return self.cachedASTs[e]end
 self.Parser.resetToInitialState(n,self.operatorPrecedenceLevels,nil,e,self.functions)local n=self.Parser.parse()self.cachedASTs[e]=n
 return n
 end
-function e:evaluate(e)if self.cachedResults[e]then
+function e:evaluate(e,n)if n and self.cachedResults[e]~=nil then
 return self.cachedResults[e]end
-self.Evaluator.resetToInitialState(e,self.variables,self.operatorFunctions,self.functions)local n=self.Evaluator:evaluate()self.cachedResults[e]=n
-return n
+self.Evaluator.resetToInitialState(e,self.variables,self.operatorFunctions,self.functions)local o=self.Evaluator:evaluate()if n then
+self.cachedResults[e]=o
+end
+return o
 end
 function e:solve(e)return self:evaluate(self:parse(self:tokenize(e),e))end
 function e:addVariable(e,n)self.variables=self.variables or{}self.variables[e]=n
@@ -336,8 +350,8 @@ self:addVariable(n,e)end
 self.cachedResults={}end
 function e:addFunction(n,e)self.functions=self.functions or{}self.functions[n]=e
 self.cachedResults={}end
-function e:addFunctions(e)for e,n in pairs(e)do
-self:addFunction(e,n)end
+function e:addFunctions(e)for n,e in pairs(e)do
+self:addFunction(n,e)end
 self.cachedResults={}end
 function e:setOperatorPrecedenceLevels(e)self.operatorPrecedenceLevels=e
 self.cachedASTs={}end
@@ -350,26 +364,27 @@ self.cachedTokens={}end
 function e:setFunctions(e)self.functions=e
 self.cachedResults={}end
 function e:resetCaches()self.cachedTokens={}self.cachedASTs={}self.cachedResults={}end
-function e:resetToInitialState(l,t,o,e,n)self.operatorPrecedenceLevels=l
-self.variables=t
-self.operatorFunctions=o
-self.operators=e
-self.functions=n
+function e:resetToInitialState(e,n,t,o,l)self.operatorPrecedenceLevels=e
+self.variables=n
+self.operatorFunctions=t
+self.operators=o
+self.functions=l
 self.cachedTokens={}self.cachedASTs={}self.cachedResults={}end
-local c={}function c:new(t,o,a,r,l)local n={}for e,t in pairs(e)do
-n[e]=t
+local a={}function a:new(a,o,t,l,r)local n={}for t,e in pairs(e)do
+n[t]=e
 end
 o=o or{}o['false']=false
 o['true']=true
-n.operatorPrecedenceLevels=t
+n.operatorPrecedenceLevels=a
 n.variables=o
-n.operatorFunctions=a
-n.operators=r
-n.functions=l
-n.cachedTokens={}n.cachedASTs={}n.cachedResults={}n.Lexer=d(nil,r)n.Parser=i(nil,t)n.Evaluator=u(nil,o,a,l)return n
+n.operatorFunctions=t
+n.operators=l
+n.functions=r
+n.cachedTokens={}n.cachedASTs={}n.cachedResults={}n.Lexer=i(nil,l)n.Parser=c(nil,a)n.Evaluator=u(nil,o,t,r)return n
 end
-return c end)local n,e="LibFormula-1.0",1
-local n,e=LibStub and LibStub:NewLibrary(n,e)or{}if not n then return end
+return a
+end)local e,n="LibFormula-1.0",1
+local n,e=LibStub and LibStub:NewLibrary(e,n)or{}if not n then return end
 local e={}function n:CreateInstance()return e:new()end
 local o=a('MathParser')function e:new()local e=setmetatable({__vm=o:new()},{__index=self})assert(e.__vm,'Invalid instance object')return e
 end

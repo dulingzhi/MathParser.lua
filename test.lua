@@ -1,6 +1,8 @@
-package.path = package.path .. ';src/?.lua'
+package.path = package.path .. ';src/?.lua;'
 
-require('tests.UTF8')
+require('tests/UTF8')
+
+local json = require('tests.dkjson')
 
 local M = require('src.MathParser')
 local I = M:new()
@@ -33,28 +35,74 @@ I:addFunction('target.interrupt', function(x)
 end)
 
 I:addFunction('spell.active', function(n)
-    return n == '英勇打击'
+    print(n)
+    return true
 end)
 
-I:addFunction('player.rage.actual', function ()
+I:addFunction('player.rage.actual', function()
     return 50
 end)
 
-print(1, I:solve('toggle(Hello) == World && !player.buff.exists(bbb, true)') == false)
+I:addFunction('swing.remains', function()
+    print('swing.remains')
+    return 1
+end)
 
-print(2, I:solve('toggle(你好 世界)') == '你好 世界')
+I:addFunction('spell.cooldown', function(n)
+    print(n)
+    return 0
+end)
 
-print(3, I:solve('print(你好, 世界)') == '你好')
+I:addFunction('target.isboss', function(n)
+    return true
+end)
 
-print(4, I:solve('toggle(cd) && (player.buff.exists(死亡之愿) || spell.cooldown(死亡之愿) > 55)'))
+I:addFunction('target.debuff.exists', function(n)
+    print(n)
+    return false
+end)
 
-print(5, I:solve('toggle(interrupts) == target.interrupt'))
+I:addFunction('target.debuff.count', function(n, x)
+    print('target.debuff.count')
+    return 1
+end)
 
-print(6, I:solve('!spell.active(英勇打击) && !spell.active(顺劈斩) && player.rage.actual >= 12'))
+I:addFunction('target.debuff.remains', function(n, k)
+    print('target.debuff.remains')
+    return 1
+end)
+
+local function dump(t, indent)
+    print(json.encode(t, { indent = indent }))
+end
+
+local function comparetbl(left, right)
+    for key, value in pairs(left) do
+        if type(value) == "table" then
+            return comparetbl(right[key], value)
+        elseif right[key] ~= value then
+            return false
+        end
+    end
+    return true
+end
+
+local function call(i, exp, result)
+    print(i, '=======================================')
+    local node = I:parse(I:tokenize(exp), exp)
+    dump(node, false)
+    if result then
+        local j = json.decode(result)
+        if j then
+            assert(comparetbl(node, json.decode(result)), 'Invalid parse')
+        end
+    end
+    -- print(i, I:evaluate(node))
+end
 
 local rotation = { --
     -- 被控制
-    { '狂暴之怒', 'player.lostcontrol(FEAR)' }, --
+    { '狂暴之怒', 'player.lostcontrol(FEAR)', '{"Arguments":[{"Value":"FEAR","TYPE":"Variable","Position":23}],"TYPE":"FunctionCall","FunctionName":"player.lostcontrol"}' }, --
     --
     { '/startattack', '!spell.active(攻击)' }, --
     -- interrupt
@@ -89,6 +137,12 @@ local rotation = { --
 
 for index, value in ipairs(rotation) do
     if value[2] then
-        -- print(value[1], I:parse(I:tokenize(value[2]), value[2]))
+        call(value[1], value[2], value[3])
     end
 end
+
+local t = os.clock()
+for i = 1, 10000, 1 do
+    I:solve('1+2+3')
+end
+print('cost = ', os.clock() - t)
