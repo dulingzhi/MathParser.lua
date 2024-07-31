@@ -20,6 +20,10 @@ function Instance:addFunc(name, func)
     self.__vm:addFunction(name, func)
 end
 
+function Instance:removeFunc(name)
+    self.__vm:removeFunction(name)
+end
+
 function Instance:exec(ast)
     return self.__vm:evaluate(ast)
 end

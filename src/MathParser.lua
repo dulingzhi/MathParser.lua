@@ -91,6 +91,17 @@ function MathParserMethods:addFunction(functionName, functionValue)
   self.cachedResults = {}
 end
 
+--- Remove a function to the evaluator.
+-- @param <String> functionName The name of the function.
+-- @param <Function> functionValue The function to remove.
+function MathParserMethods:removeFunction(functionName)
+    if self.functions and self.functions[functionName] then
+        self.functions[functionName] = nil
+        -- Reset the cache so we won't get unexpected results
+        self.cachedResults = {}
+    end
+end
+
 --- Adds multiple functions to the evaluator.
 -- @param <Table> functions The functions to add.
 function MathParserMethods:addFunctions(functions)
