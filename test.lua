@@ -1,4 +1,4 @@
-package.path = package.path .. ';src/?.lua;'
+package.path = package.path .. ';src/?.lua;./?/init.lua;'
 
 require('tests/UTF8')
 
