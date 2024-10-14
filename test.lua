@@ -146,3 +146,15 @@ for i = 1, 10000, 1 do
     I:solve('1+2+3')
 end
 print('cost = ', os.clock() - t)
+
+I:addFunction('multi.args', function(...)
+    print('multi.args', select('#', ...))
+    return ...
+end)
+
+I:addFunction('multi.args.print', function(...)
+    print('multi.args.print', ...)
+    return 1
+end)
+
+print('result', I:solve('multi.args.print(multi.args(1,2,3,4,5))'))

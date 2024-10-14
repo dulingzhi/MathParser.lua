@@ -64,6 +64,12 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
   local evaluateUnaryOperator, evaluateBinaryOperator,
         evaluateOperator, evaluateFunctionCall, evaluateNode
 
+  local function SafePack(tbl, ...)
+    for i=1, select('#', ...) do
+        insert(tbl, (select(i, ...)))
+    end
+  end
+
   --- Evaluates the given unary operator node.
   -- @param <Table> node The node to evaluate.
   -- @return <Number> result The result of the evaluation.
@@ -116,8 +122,7 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
 
     local evaluatedArguments = {}
     for _, argument in ipairs(arguments) do
-      local evaluatedArgument = evaluateNode(argument)
-      insert(evaluatedArguments, evaluatedArgument)
+      SafePack(evaluatedArguments, evaluateNode(argument))
     end
 
     return functionCall(unpack(evaluatedArguments))
