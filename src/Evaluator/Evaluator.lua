@@ -18,22 +18,22 @@ local DEFAULT_OPERATOR_FUNCTIONS = {
     ["!"] = function(operand) return not operand end,
   },
   Binary = {
-    ["+"] = function(left, right) return left + right end,
-    ["-"] = function(left, right) return left - right end,
-    ["/"] = function(left, right) return left / right end,
-    ["*"] = function(left, right) return left * right end,
-    ["^"] = function(left, right) return left ^ right end,
-    ["%"] = function(left, right) return left % right end,
-    ["=="] = function(left, right) return left == right end,
-    ["!="] = function(left, right) return left ~= right end,
-    [">"] = function(left, right) return left > right end,
-    ["<"] = function(left, right) return left < right end,
-    [">="] = function(left, right) return left >= right end,
-    ["<="] = function(left, right) return left <= right end,
-    ["||"] = function(left, right) return not not left or not not right end,
-    ["||||"] = function(left, right) return not not left or not not right end,
-    ["&&"] = function(left, right) return not not (left and right) end,
-    [":="] = function(left, right, _node, variable) variable[left] = right end,
+    ["+"] = function(evaluateNode, left, right) return (evaluateNode(left)) + (evaluateNode(right)) end,
+    ["-"] = function(evaluateNode, left, right) return (evaluateNode(left)) - (evaluateNode(right)) end,
+    ["/"] = function(evaluateNode, left, right) return (evaluateNode(left)) / (evaluateNode(right)) end,
+    ["*"] = function(evaluateNode, left, right) return (evaluateNode(left)) * (evaluateNode(right)) end,
+    ["^"] = function(evaluateNode, left, right) return (evaluateNode(left)) ^ (evaluateNode(right)) end,
+    ["%"] = function(evaluateNode, left, right) return (evaluateNode(left)) % (evaluateNode(right)) end,
+    ["=="] = function(evaluateNode, left, right) return (evaluateNode(left)) == (evaluateNode(right)) end,
+    ["!="] = function(evaluateNode, left, right) return (evaluateNode(left)) ~= (evaluateNode(right)) end,
+    [">"] = function(evaluateNode, left, right) return (evaluateNode(left)) > (evaluateNode(right)) end,
+    ["<"] = function(evaluateNode, left, right) return (evaluateNode(left)) < (evaluateNode(right)) end,
+    [">="] = function(evaluateNode, left, right) return (evaluateNode(left)) >= (evaluateNode(right)) end,
+    ["<="] = function(evaluateNode, left, right) return (evaluateNode(left)) <= (evaluateNode(right)) end,
+    ["||"] = function(evaluateNode, left, right) return not not (evaluateNode(left)) or not not (evaluateNode(right)) end,
+    ["||||"] = function(evaluateNode, left, right) return not not (evaluateNode(left)) or not not (evaluateNode(right)) end,
+    ["&&"] = function(evaluateNode, left, right) return not not ((evaluateNode(left)) and (evaluateNode(right))) end,
+    [":="] = function(evaluateNode, left, right, variable) variable[(evaluateNode(left))] = (evaluateNode(right)) end,
   }
 }
 
@@ -94,9 +94,7 @@ local function Evaluator(expression, variables, operatorFunctions, functions)
     local operatorFunction = operatorFunctions.Binary[nodeValue]
     assert(operatorFunction, "invalid operator")
 
-    local leftValue = evaluateNode(nodeLeft)
-    local rightValue = evaluateNode(nodeRight)
-    return operatorFunction(leftValue, rightValue, node, variables)
+    return operatorFunction(evaluateNode, nodeLeft, nodeRight, variables)
   end
 
   --- Check what type of operator node it is and evaluates it by calling the appropriate function.

@@ -141,11 +141,16 @@ for index, value in ipairs(rotation) do
     end
 end
 
+print('===================================================================================')
+
 local t = os.clock()
 for i = 1, 10000, 1 do
     I:solve('1+2+3')
 end
 print('cost = ', os.clock() - t)
+
+
+print('===================================================================================')
 
 I:addFunction('multi.args', function(...)
     print('multi.args', select('#', ...))
@@ -157,4 +162,21 @@ I:addFunction('multi.args.print', function(...)
     return 1
 end)
 
+
 print('result', I:solve('multi.args.print(multi.args(1,2,3,4,5))'))
+
+print('===================================================================================')
+
+I:addFunction('func.A', function (a)
+    print('call func.A')
+    return false
+end)
+
+I:addFunction('func.B', function (a)
+    print('call func.B')
+    return true
+end)
+
+print('Binary operator optimisation, Only func.A called', I:solve('func.A && func.B'))
+print('Binary operator optimisation, func.A func.B called', I:solve('!func.A && func.B'))
+
